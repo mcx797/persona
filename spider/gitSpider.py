@@ -1,6 +1,7 @@
 from url import Url
 from spider import Spider
 from data import Data
+from myRes import myRes
 
 
 def spiderCommit(mySpider, myData):
@@ -24,12 +25,10 @@ def spiderTree(mySpider, myData):
 
 
 if __name__ == '__main__':
-    respose = {}
-    respose['apollo'] = 'ctripcorp'
-    respose['tidb'] = 'pingcap'
-    site = 'tidb'
-    
-    myUrl = Url(respose[site], site)
+    [resposeAut, resposeNam] = \
+        myRes().getRespose('tidb')
+
+    myUrl = Url(resposeAut, resposeNam)
     mySpider = Spider(myUrl)
     myData = Data(myUrl)
     spiderLists(mySpider)
