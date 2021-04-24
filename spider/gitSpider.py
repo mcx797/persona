@@ -1,7 +1,7 @@
-from url import Url
-from spider import Spider
-from data import Data
-from myRes import myRes
+from spider.url import Url
+from spider.Spider import Spider
+from spider.data import Data
+from res.myRes import myRes
 
 
 def spiderCommit(mySpider, myData):
@@ -24,16 +24,27 @@ def spiderTree(mySpider, myData):
     mySpider.spiderTree(treeList)
 
 
+def spiderDev(mySpider, myData):
+    commitList = myData.readCommitList()
+    developer = {}
+    for key in commitList:
+        if key['author'] != None:
+            developer[key['author']['login']] = 1
+    developers = []
+    for key in developer:
+        developers.append(key)
+    mySpider.spiderDevl(developers)
+
+
 if __name__ == '__main__':
     [resposeAut, resposeNam] = \
         myRes().getRespose('tidb')
-
+# pmd spark maven
     myUrl = Url(resposeAut, resposeNam)
     mySpider = Spider(myUrl)
     myData = Data(myUrl)
-    spiderLists(mySpider)
-    spiderCommit(mySpider, myData)
-    spiderIssue(mySpider, myData)
+    #spiderLists(mySpider)
+    #spiderCommit(mySpider, myData)
+    #spiderIssue(mySpider, myData)
     spiderTree(mySpider, myData)
-
-
+    #spiderDev(mySpider, myData)

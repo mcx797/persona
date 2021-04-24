@@ -1,4 +1,4 @@
-from url import Url
+from spider.url import Url
 import os
 import json
 
@@ -14,7 +14,7 @@ class Data:
         f.close()
         return contain
 
-    def readCommit(self):
+    def readCommitList(self):
         commitListPath = self.myUrl.commitListPath()
         commitList = []
         for name in os.listdir(commitListPath):
@@ -23,7 +23,7 @@ class Data:
                 commitList.append(i)
         return commitList
 
-    def readIssue(self):
+    def readIssueList(self):
         issueListPath = self.myUrl.issueListPath()
         issueList = []
         for name in os.listdir(issueListPath):

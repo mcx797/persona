@@ -1,10 +1,10 @@
-from url import Url
-from path import Path
-import sys
+from spider.url import Url
+from spider.path import Path
+from spider.saveFile import saveFile
 import urllib.request
-import os
 import json
-from saveFile import saveFile
+import sys
+import os
 
 
 class Spider:
@@ -73,9 +73,18 @@ class Spider:
                 strHtml = self.spiderContent(self.myUrl.issueUrl(number))
                 saveFile(issuePath, strHtml)
 
+    def spiderBlob(self, Blob):
+        blobPath = self.myUrl.blobPath(Blob['sha'])
+        myPath = Path(blobPath)
+        if not myPath.pathExs():
+            blobUrl = self.myUrl.blobUrl(Blob['url'])
+            strHtml = self.spiderContent(blobUrl)
+            saveFile(blobPath, strHtml)
+
     def spiderTree(self, treeList):
         n = 0
         treeNameIn = {}
+        blobNameIn = {}
         for tree in treeList:
             treeNameIn[tree['sha']] = 1
         for tree in treeList:
@@ -90,14 +99,26 @@ class Spider:
             else:
                 f = open(self.myUrl.treePath(sha), 'r', encoding='utf-8')
                 strJson = json.loads(f.read())
+                f.close()
             for i in strJson['tree']:
                 if i['type'] == 'tree':
                     if i['sha'] in treeNameIn.keys():
                         continue
                     treeList.append(i)
                     treeNameIn[i['sha']] = 1
-                #if i['type'] == 'blob':
-                    #self.spiderBlob(i)
+                if i['type'] == 'blob':
+                    if i['sha'] in blobNameIn.keys():
+                        continue
+                    self.spiderBlob(i)
+                    blobNameIn[i['sha']] = 1
             n += 1
             print("n   = ", n)
             print("len =", len(treeList))
+
+    def spiderDevl(self, developers):
+        for key in developers:
+            developerPath = self.myUrl.developerPath(key)
+            myPath = Path(developerPath)
+            if not myPath.pathExs():
+                strHtml = self.spiderContent(self.myUrl.developerUrl(key))
+                saveFile(developerPath, strHtml)

@@ -9,17 +9,20 @@ class Url:
         self.gitName = name + "/" + code + "/"
 
     def accessToken(self):
-        return "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"
+        return "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"
+
+    def rootData(self):
+        return "data/"
 
 ################################
 #   path类本地
 ################################
 
     def commitListPath(self):
-        return "../data/" + self.codeName + "/commitList"
+        return self.rootData() + self.codeName + "/commitList"
 
     def issueListPath(self):
-        return "../data/" + self.codeName + "/issueList"
+        return self.rootData() + self.codeName + "/issueList"
 
     def comLstConPath(self, i):
         return self.commitListPath() + '/' + str(i) + '.json'
@@ -28,13 +31,19 @@ class Url:
         return self.issueListPath() + '/' + str(i) + '.json'
 
     def commitPath(self, sha):
-        return "../data/" + self.codeName + '/commit/' + sha + '.json'
+        return self.rootData() + self.codeName + '/commit/' + sha + '.json'
 
     def issuePath(self, number):
-        return "../data/" + self.codeName + '/issue/' + str(number) + '.json'
+        return self.rootData() + self.codeName + '/issue/' + str(number) + '.json'
 
     def treePath(self, sha):
-        return "../data/" + self.codeName + '/tree/' + str(sha) + '.json'
+        return self.rootData() + self.codeName + '/tree/' + str(sha) + '.json'
+
+    def blobPath(self, sha):
+        return self.rootData() + self.codeName + '/blob/' + str(sha) + '.json'
+
+    def developerPath(self, id):
+        return self.rootData() + self.codeName + '/developer/' + id + '.json'
 
 ######################################
 #   github API
@@ -55,7 +64,15 @@ class Url:
     def issueUrl(self, number):
         return "https://api.github.com/repos/" + self.gitName + "issues/" + str(number) + "?access_token=" + self.accessToken()
 
-    def treeUrl(self, sha):
-        return sha + "?access_token=" + self.accessToken()
+    def treeUrl(self, urlInitial):
+        return urlInitial + "?access_token=" + self.accessToken()
+
+    def blobUrl(self, urlInitial):
+        return urlInitial + "?access_token=" + self.accessToken()
+
+    def developerUrl(self, id):
+        return "https://api.github.com/users/" + id + "?access_token=" + self.accessToken()
+
+
 
 
